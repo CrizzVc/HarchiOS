@@ -1,5 +1,7 @@
+/* Colores base. El import final de skwd-theme.css (paleta del fondo) tiene prioridad
+   sobre el 'background', y el 'foreground' se deriva aqui de la paleta. */
 @define-color background #1a1b26;
-@define-color foreground #c0caf5;
+@define-color foreground @on_background;
 
 * {
   border: none;
@@ -28,10 +30,14 @@
   margin-right: 5px;
 }
 
+/* Ventana de la barra: transparente. La clase .background repetida sube la
+   especificidad para ganarle a skwd-theme.css (pinta la ventana con @skwd_surface),
+   que se importa al final del archivo. El color de texto sale de la paleta. */
 window#waybar,
-window#waybar.background {
+window#waybar.background.background {
   background: transparent;
   background-color: transparent;
+  color: @on_background;
 }
 
 window#waybar.empty #window {
@@ -58,7 +64,14 @@ mpris.empty {
 }
 
 
-#workspaces button {
+/* Botones de escritorio: modulos custom/wsN (ver config.jsonc).
+   Sustituyen a hyprland/workspaces, que no puede cambiar de escritorio
+   con este Hyprland (dispatch en Lua). */
+#custom-ws1,
+#custom-ws2,
+#custom-ws3,
+#custom-ws4,
+#custom-ws5 {
     padding: 0px 8px;
     margin: 0px 2px;
     color: @background;
@@ -66,28 +79,40 @@ mpris.empty {
     background-color: alpha(@foreground, .4);
 }
 
-#workspaces button.active {
-    padding: 0px 8px;
-    margin: 0px 2px;
+#custom-ws1.active,
+#custom-ws2.active,
+#custom-ws3.active,
+#custom-ws4.active,
+#custom-ws5.active {
     background: @foreground;
     color: @background;
-    border-radius: 15px;
-    opacity: 1; 
+    opacity: 1;
 }
 
-#workspaces button.empty {
-    opacity: 0.2; 
+#custom-ws1.empty,
+#custom-ws2.empty,
+#custom-ws3.empty,
+#custom-ws4.empty,
+#custom-ws5.empty {
+    opacity: 0.2;
 }
 
-#workspaces button.empty.active {
-opacity: 0.75; 
+#custom-ws1.empty.active,
+#custom-ws2.empty.active,
+#custom-ws3.empty.active,
+#custom-ws4.empty.active,
+#custom-ws5.empty.active {
+    opacity: 0.75;
 }
 
-#workspaces button.active:hover,
-#workspaces button:hover {
+#custom-ws1:hover,
+#custom-ws2:hover,
+#custom-ws3:hover,
+#custom-ws4:hover,
+#custom-ws5:hover {
     background-color: alpha(@foreground, .3);
     color: @background;
-    opacity: 1; 
+    opacity: 1;
     transition: .7s;
 }
 
@@ -129,7 +154,7 @@ opacity: 0.75;
   transition: .7s;
 }
 
-#custom-expand-icon {
+#custom-logout {
   margin-right: 7px;
   padding: 0px 10px;
   border-radius: 15px;

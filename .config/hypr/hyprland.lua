@@ -212,8 +212,11 @@ hl.config({
 
 hl.config({
     misc = {
-        force_default_wallpaper = -1,    -- Set to 0 or 1 to disable the anime mascot wallpapers
-        disable_hyprland_logo   = false, -- If true disables the random hyprland logo / anime girl background. :(
+        -- 0 = nunca pinta los wallpapers por defecto de Hyprland (mascotas anime).
+        -- Con esto, mientras se carga tu wallpaper no ves nada raro: ves negro.
+        force_default_wallpaper = 0,
+        -- Tampoco el logo/random background de Hyprland. :(
+        disable_hyprland_logo   = true,
     },
 })
 
@@ -264,13 +267,16 @@ local mainMod = "SUPER" -- Sets "Windows" key as main modifier
 hl.bind(mainMod .. " + Q", hl.dsp.exec_cmd(terminal))
 local closeWindowBind = hl.bind(mainMod .. " + C", hl.dsp.window.close())
 -- closeWindowBind:set_enabled(false)
-hl.bind(mainMod .. " + M", hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'"))
+hl.bind(mainMod .. " + M", hl.dsp.exec_cmd("/home/cris/.config/hypr/scripts/lock.sh"))
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager))
 hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mainMod .. " + R", hl.dsp.exec_cmd(menu))
 hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
 hl.bind(mainMod .. " + J", hl.dsp.layout("togglesplit"))    -- dwindle only
-hl.bind(mainMod .. " + L", hl.dsp.exec_cmd("~/.config/hypr/scripts/lock.sh"))
+hl.bind(mainMod .. " + L", hl.dsp.exec_cmd("/home/cris/.config/hypr/scripts/lock.sh"))
+
+-- Skwd wallpaper picker (abre/cierra: skwd-wall-v2 hace de toggle)
+hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("skwd-wall-v2"))
 
 -- Move focus with mainMod + arrow keys
 hl.bind(mainMod .. " + left",  hl.dsp.focus({ direction = "left" }))
@@ -368,19 +374,35 @@ hl.window_rule({
 hl.layer_rule({ match = { namespace = "nwg-drawer" }, blur = true, ignore_alpha = 0 })
 
 hl.on("hyprland.start", function()
+    -- Restaura TU wallpaper en cada inicio de sesion.
+    -- skwd-walld es un servicio systemd de usuario que SOBREVIVE al cerrar
+    -- sesion (el gestor de usuario no se reinicia si vuelves a entrar en el
+    -- mismo arranque), asi que sin este restart no vuelve a ejecutar su
+    -- "restore" y te quedas viendo el wallpaper por defecto de Hyprland.
+    hl.exec_cmd("systemctl --user restart skwd-walld.service")
+
+    -- Bloqueo automatico al arrancar la sesion: SDDM va en autologin, asi que
+    -- hyprlock es lo primero que aparece al encender el PC (nada de escritorio
+    -- visible). Se lanza antes que el resto para minimizar esa ventana.
+    hl.exec_cmd("/home/cris/.config/hypr/scripts/boot-lock.sh")
+
     -- Tus otros comandos de inicio (wallpaper, etc.)
 
     -- Waybar
     hl.exec_cmd("waybar")
 
+    -- Vigila los cambios de escritorio y refresca los botones del waybar
+    hl.exec_cmd("/home/cris/.config/waybar/scripts/workspace-watch.sh")
+
     -- Dock con auto-ocultado (-d) en capa top con lanzador nwg-drawer en capa overlay
-    hl.exec_cmd("nwg-dock-hyprland -d -l top -c 'nwg-drawer -ovl'")
+    -- -mb 16: deja 16px de separación entre el dock y el borde inferior de la pantalla
+    hl.exec_cmd("nwg-dock-hyprland -d -l top -mb 16 -c 'nwg-drawer -ovl'")
 
     -- swayidle para bloqueo de pantalla con Hyprlock (dos fases)
     hl.exec_cmd("swayidle -w \
-        timeout 300 '~/.config/hypr/scripts/lock.sh' \
+        timeout 300 '/home/cris/.config/hypr/scripts/lock.sh' \
         timeout 600 'hyprctl dispatch dpms off' \
         resume 'hyprctl dispatch dpms on' \
-        before-sleep '~/.config/hypr/scripts/lock.sh'")
+        before-sleep '/home/cris/.config/hypr/scripts/lock.sh'")
 end)
 

@@ -2,19 +2,19 @@
    nwg-dock-hyprland — Estilo iPadOS Dock (Oscuro)
    ============================================ */
 
-/* Contenedor principal — vidrio oscuro translúcido */
+/* Contenedor principal — vidrio oscuro translúcido.
+   Nota: GTK ignora el padding  10px 16px de la ventana aquí, el aire real se da en #box. */
 window {
     background-color: rgba(20, 20, 20, 0.75);
-    border-radius: 24px;
+    border-radius: 10px;
     border: none;
-    padding: 10px 16px;
     box-shadow: none;
     outline: none;
 }
 
-/* Caja interna */
+/* Caja interna — aquí vive el contenido, así que aquí va el padding */
 #box {
-    padding: 0px;
+    padding: 5px 5px;
 }
 
 /* Botones de aplicación — quitar todos los estilos por defecto de GTK3 */
@@ -22,7 +22,7 @@ button {
     all: unset;
     background: transparent;
     border: none;
-    border-radius: 16px;
+    border-radius: 10px;
     padding: 6px;
     margin: 0 8px;
     box-shadow: none;

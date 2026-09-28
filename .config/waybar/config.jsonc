@@ -6,7 +6,7 @@
   "height": 26,
   "modules-left": [
     "custom/omarchy",
-    "hyprland/workspaces",
+    "group/workspaces",
     "hyprland/window"
   ],
   "modules-center": [
@@ -27,14 +27,60 @@
     "cpu",
     "battery"
   ],
-  "hyprland/workspaces": {
-    "disable-scroll": true,
-    "all-outputs": true,
-    "cursor": true,
-    "format": "{icon}",
-    "persistent-workspaces": {
-      "*": 5
-    }
+  /* Escritorios.
+     El modulo nativo hyprland/workspaces no funciona con este Hyprland:
+     el al hacer clic envia "dispatch workspace N" y este build (config en
+     Lua) exige "dispatch 'hl.dsp.focus({workspace = N})'".
+     Se sustituye por 5 modulos custom que si usan la sintaxis Lua. */
+  "group/workspaces": {
+    "orientation": "horizontal",
+    "modules": [
+      "custom/ws1",
+      "custom/ws2",
+      "custom/ws3",
+      "custom/ws4",
+      "custom/ws5"
+    ]
+  },
+  "custom/ws1": {
+    "exec": "/home/cris/.config/waybar/scripts/workspace.sh 1",
+    "return-type": "json",
+    "interval": 1,
+    "signal": 11,
+    "format": "{}",
+    "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 1 })'"
+  },
+  "custom/ws2": {
+    "exec": "/home/cris/.config/waybar/scripts/workspace.sh 2",
+    "return-type": "json",
+    "interval": 1,
+    "signal": 11,
+    "format": "{}",
+    "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 2 })'"
+  },
+  "custom/ws3": {
+    "exec": "/home/cris/.config/waybar/scripts/workspace.sh 3",
+    "return-type": "json",
+    "interval": 1,
+    "signal": 11,
+    "format": "{}",
+    "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 3 })'"
+  },
+  "custom/ws4": {
+    "exec": "/home/cris/.config/waybar/scripts/workspace.sh 4",
+    "return-type": "json",
+    "interval": 1,
+    "signal": 11,
+    "format": "{}",
+    "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 4 })'"
+  },
+  "custom/ws5": {
+    "exec": "/home/cris/.config/waybar/scripts/workspace.sh 5",
+    "return-type": "json",
+    "interval": 1,
+    "signal": 11,
+    "format": "{}",
+    "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 5 })'"
   },
   "custom/omarchy": {
     "format": "<span font='omarchy'>\ue900</span>",
@@ -156,15 +202,17 @@
       "children-class": "tray-group-item"
     },
     "modules": [
-      "custom/expand-icon",
+      "custom/logout",
       "tray",
       "memory",
       "custom/weather"
     ]
   },
-  "custom/expand-icon": {
+  "custom/logout": {
     "format": "",
-    "tooltip": false
+    "tooltip": true,
+    "tooltip-format": "Cerrar sesión",
+    "on-click": "hyprctl dispatch 'hl.dsp.exit()'"
   },
   "custom/screenrecording-indicator": {
     "on-click": "omarchy-capture-screenrecording",
