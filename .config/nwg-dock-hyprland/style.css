@@ -1,0 +1,66 @@
+/* ============================================
+   nwg-dock-hyprland — Estilo iPadOS Dock (Oscuro)
+   ============================================ */
+
+/* Contenedor principal — vidrio oscuro translúcido */
+window {
+    background-color: rgba(20, 20, 20, 0.75);
+    border-radius: 24px;
+    border: none;
+    padding: 10px 16px;
+    box-shadow: none;
+    outline: none;
+}
+
+/* Caja interna */
+#box {
+    padding: 0px;
+}
+
+/* Botones de aplicación — quitar todos los estilos por defecto de GTK3 */
+button {
+    all: unset;
+    background: transparent;
+    border: none;
+    border-radius: 16px;
+    padding: 6px;
+    margin: 0 8px;
+    box-shadow: none;
+    outline: none;
+    text-shadow: none;
+    transition: background-color 150ms ease-out;
+}
+
+/* Hover — sutil, como en iPadOS */
+button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    box-shadow: none;
+    outline: none;
+    text-shadow: none;
+}
+
+/* Click activo */
+button:active {
+    background-color: rgba(255, 255, 255, 0.15);
+    box-shadow: none;
+    outline: none;
+    text-shadow: none;
+}
+
+/* Indicador de aplicación activa */
+button.active {
+    background-color: rgba(255, 255, 255, 0.12);
+    border: none;
+    box-shadow: none;
+    outline: none;
+    text-shadow: none;
+}
+
+/* Separador entre pinned y running apps */
+separator {
+    background-color: rgba(255, 255, 255, 0.12);
+    min-width: 1px;
+    min-height: 36px;
+    margin: 4px 10px;
+    border-radius: 1px;
+}
