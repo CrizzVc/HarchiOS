@@ -1,5 +1,7 @@
 singleton Theme Theme.qml
+singleton AppState AppState.qml
 Sidebar Sidebar.qml
+Launcher Launcher.qml
 IconButton IconButton.qml
 Workspaces Workspaces.qml
 ClockWidget ClockWidget.qml

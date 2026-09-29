@@ -61,7 +61,7 @@ PanelWindow {
                 Layout.alignment: Qt.AlignHCenter
                 icon: "apps"
                 tooltip: "Aplicaciones"
-                onClicked: Quickshell.execDetached(["wofi", "--show", "drun"])
+                onClicked: AppState.launcherOpen = true
             }
 
             Rectangle {
@@ -139,6 +139,14 @@ PanelWindow {
                     onTriggered: powerBtn.confirm = false
                 }
             }
+        }
+    }
+
+    // Si el lanzador se abre, el popup de volumen queda debajo de el: cierralo.
+    Connections {
+        target: AppState
+        function onLauncherOpenChanged() {
+            if (AppState.launcherOpen) volume.popupOpen = false
         }
     }
 
