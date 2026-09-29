@@ -372,6 +372,10 @@ hl.window_rule({
 
 -- nwg-drawer: efectos visuales (blur e ignore_alpha)
 hl.layer_rule({ match = { namespace = "nwg-drawer" }, blur = true, ignore_alpha = 0 })
+-- Barra lateral de quickshell: cristal esmerilado. ignore_alpha = 0 hace que el
+-- blur respete la alfa, asi que la parte transparente de la superficie (el hueco
+-- del popup de volumen) NO sale como un rectangulo borroso sobre las ventanas.
+hl.layer_rule({ match = { namespace = "quickshell:sidebar" }, blur = true, ignore_alpha = 0 })
 
 hl.on("hyprland.start", function()
     -- Restaura TU wallpaper en cada inicio de sesion.
@@ -388,11 +392,14 @@ hl.on("hyprland.start", function()
 
     -- Tus otros comandos de inicio (wallpaper, etc.)
 
-    -- Waybar
-    hl.exec_cmd("waybar")
+    -- Waybar: OCULTA. La barra lateral de quickshell la sustituye.
+    -- Descomenta estas dos lineas para volver a tenerla.
+    -- hl.exec_cmd("waybar")
+    -- hl.exec_cmd("/home/cris/.config/waybar/scripts/workspace-watch.sh")
 
-    -- Vigila los cambios de escritorio y refresca los botones del waybar
-    hl.exec_cmd("/home/cris/.config/waybar/scripts/workspace-watch.sh")
+    -- Barra lateral de quickshell (workspaces, media, volumen, CPU, reloj...)
+    -- -d: daemoniza | -n: no levanta una segunda instancia si ya corre
+    hl.exec_cmd("qs -p /home/cris/.config/quickshell/sidebar -d -n")
 
     -- Dock con auto-ocultado (-d) en capa top con lanzador nwg-drawer en capa overlay
     -- -mb 16: deja 16px de separación entre el dock y el borde inferior de la pantalla

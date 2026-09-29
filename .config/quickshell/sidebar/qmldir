@@ -1,0 +1,8 @@
+singleton Theme Theme.qml
+Sidebar Sidebar.qml
+IconButton IconButton.qml
+Workspaces Workspaces.qml
+ClockWidget ClockWidget.qml
+CpuRing CpuRing.qml
+MediaControl MediaControl.qml
+Volume Volume.qml
